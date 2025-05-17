@@ -11,3 +11,9 @@ const textGradient = LinearGradient(
   end: Alignment.centerRight,
   colors: [Color(0xFF0090CD), Color(0xFF3BA598)],
 );
+
+const paleGradient = LinearGradient(
+  begin: Alignment.centerLeft,
+  end: Alignment.centerRight,
+  colors: [Color(0xFF42A9D3), Color(0xFF38CFC9)],
+);

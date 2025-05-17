@@ -1,12 +1,9 @@
 import 'package:cost_control/transitions.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'home_page.dart';
-import 'widget_tree.dart';
 import 'registration_page.dart';
 import 'package:cost_control/gradients.dart';
+import 'package:cost_control/controllers/auth_controller.dart';
 
-/// Экран входа в аккаунт
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -15,12 +12,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _phoneLogController = TextEditingController();
+  final _emailLogController = TextEditingController();
   final _passwordLogController = TextEditingController();
 
   @override
   void dispose() {
-    _phoneLogController.dispose();
+    _emailLogController.dispose();
     _passwordLogController.dispose();
     super.dispose();
   }
@@ -29,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // ─── Прозрачный AppBar ───────────────────────────────────
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -40,7 +36,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Stack(
         children: [
-          // ─── Контент ─────────────────────────────────────────
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -49,7 +44,6 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   const SizedBox(height: 18),
 
-                  // Заголовок
                   const Text(
                     'Login',
                     style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
@@ -97,9 +91,8 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 50),
 
-                  // Поле телефона
                   TextField(
-                    controller: _phoneLogController,
+                    controller: _emailLogController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.person),
                       hintText: 'Enter your email',
@@ -109,7 +102,6 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 45),
 
-                  // Поле пароля + Forgot
                   TextField(
                     controller: _passwordLogController,
                     decoration: InputDecoration(
@@ -121,7 +113,6 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 60),
 
-                  // Кнопка Login
                   Center(
                     child: Column(
                       children: [
@@ -138,15 +129,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                           ),
                           onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              CreateTransitionRouteFoSi(
-                                Offset(1, 0),
-                                WidgetTree(),
-                                Duration(milliseconds: 900),
-                              ),
-                              (_) => false,
-                            );
+                            final email = _emailLogController.text.trim();
+                            final pass  = _passwordLogController.text.trim();
+                            AuthController.instance.login(email, pass);
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -195,9 +180,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-// ──────────────────────────────────────────────────────────────
-//  Кастомное поле ввода с закруглёнными краями
-// ──────────────────────────────────────────────────────────────
 class _RoundedTextField extends StatelessWidget {
   const _RoundedTextField({
     required this.controller,

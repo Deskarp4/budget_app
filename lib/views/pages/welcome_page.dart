@@ -60,12 +60,11 @@ class _WelcomePageState extends State<WelcomePage>
               ),
 
               Padding(
-                padding: EdgeInsets.only(top: 30),
+                padding: EdgeInsets.only(top: 20),
                 child: Text(
                   'Track your income, expenses, \nplan budgets',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    // fontFamily: GoogleFonts.rubikTextTheme(),
                     fontSize: 18,
                     color: Color(0xff364850),
                   ),
@@ -142,7 +141,7 @@ class _WelcomePageState extends State<WelcomePage>
           ),
 
           Positioned(
-            top: 390,
+            top: 440,
             right: 0,
             left: 0,
             child: Padding(
@@ -151,7 +150,6 @@ class _WelcomePageState extends State<WelcomePage>
                 'Start controlling your budget',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  // fontFamily: GoogleFonts.rubikTextTheme(),
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
                   color: Colors.green[0],

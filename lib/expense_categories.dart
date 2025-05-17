@@ -1,0 +1,15 @@
+const expensesCategories = [
+  'Food products',
+  'Cafes and restaurants',
+  'Coffee and fastfood',
+  'Clothes',
+  'Transport',
+  'Health',
+  'Entertainment',
+  'Education',
+  'Home services',
+  'Taxes',
+  'Car',
+  'Insurance',
+  'Other',
+];

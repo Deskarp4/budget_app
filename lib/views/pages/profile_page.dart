@@ -1,4 +1,7 @@
+import 'package:cost_control/views/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -8,51 +11,25 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  TextEditingController controller = TextEditingController();
-  double sliderValue = 0.0;
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SingleChildScrollView(
-          padding: EdgeInsets.all(15),
-          child: Column(
-            children: [
-              TextField(
-                controller: controller,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 1),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 1),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                ),
-                onEditingComplete: () => setState(() {}),
-              ),
-              InkWell(
-                splashColor: Colors.teal,
-                child: Text(controller.text),
-                onTap: () => print('selected'),
-              ),
-              Slider(
-                value: sliderValue,
-                divisions: 10,
-                max: 10,
-                onChanged: (value) {
-                  setState(() {
-                    sliderValue = value;
-                  });
-                },
-              ),
-            ],
+    return Scaffold(
+      body: Container(alignment: Alignment.center, child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(minimumSize: Size(200, 70)),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Get.offAll(() => HomePage());
+            },
+            child: Text('Logout', style: TextStyle(fontSize: 26),),
           ),
-        ),
-      ],
+        ],
+      ),
+      ),
     );
   }
 }
+

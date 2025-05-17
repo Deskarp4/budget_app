@@ -1,79 +1,78 @@
-import 'package:cost_control/data/notifiers.dart';
+import 'package:cost_control/views/pages/expenses.dart';
 import 'package:cost_control/views/pages/profile_page.dart';
 import 'package:cost_control/views/pages/settings_page.dart';
+import 'package:cost_control/views/pages/login_page.dart';
 import 'home_page.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/navbar_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class WidgetTree extends StatefulWidget {
+class WidgetTree extends StatelessWidget {
   const WidgetTree({super.key});
 
   @override
-  State<WidgetTree> createState() => _WidgetTreeState();
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (snapshot.hasData) {
+          return const _Shell();
+        } else {
+          return const LoginPage();
+        }
+      },
+    );
+  }
 }
 
-class _WidgetTreeState extends State<WidgetTree> {
+class _Shell extends StatefulWidget {
+  const _Shell({super.key});
+
+  @override
+  State<_Shell> createState() => _ShellState();
+}
+
+class _ShellState extends State<_Shell> {
   int _current = 0;
-  static final List<Widget> _pages = [const HomePage(), const ProfilePage()];
+
+  static final _pages = [
+    const HomePage(),
+    ExpensesPage(),
+    const ProfilePage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Budget app',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        actions: [
-          ValueListenableBuilder(
-            valueListenable: themeMode,
-            builder:
-                (context, value, child) => IconButton(
-                  onPressed: () {
-                    themeMode.value = !themeMode.value;
-                  },
-                  icon: Icon(
-                    themeMode.value ? Icons.dark_mode : Icons.light_mode,
-                  ),
-                ),
-          ),
-        ],
-      ),
-
       drawer: SafeArea(
         child: Drawer(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                child: Divider(thickness: 2, indent: 30, endIndent: 30),
-                margin: EdgeInsets.only(top: 30),
-              ),
-
+              const SizedBox(height: 30),
+              const Divider(thickness: 2, indent: 30, endIndent: 30),
               Padding(
-                padding: EdgeInsets.only(left: 10, right: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SettingsPage()),
-                    );
-                  },
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const SettingsPage()),
+                  ),
                   style: ElevatedButton.styleFrom(
                     shadowColor: Colors.transparent,
-                    padding: EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: Row(
-                    children: [
+                    children: const [
                       Icon(Icons.settings, size: 36),
-                      Padding(
-                        padding: EdgeInsets.only(left: 16),
-                        child: Text('Settings', style: TextStyle(fontSize: 24)),
-                      ),
+                      SizedBox(width: 16),
+                      Text('Settings', style: TextStyle(fontSize: 24)),
                     ],
                   ),
                 ),
@@ -82,17 +81,16 @@ class _WidgetTreeState extends State<WidgetTree> {
           ),
         ),
       ),
-
       body: IndexedStack(index: _current, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _current,
         onTap: (i) => setState(() => _current = i),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Expenses'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );
-    ;
   }
 }
